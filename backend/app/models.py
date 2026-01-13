@@ -11,7 +11,7 @@ class Chart(Base):
 class SpotifyData(Base):
     __tablename__ = "spotify_data"
     id = Column(Integer, primary_key=True, index=True)
-    spotify_id = Column(Integer, index=True)
+    spotify_id = Column(String, index=True)
     name = Column(String, index=True)
     artists = Column(String, index=True)
     country = Column(String, index=True)

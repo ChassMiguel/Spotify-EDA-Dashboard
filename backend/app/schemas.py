@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ConfigDict
 from typing import Dict, Any
+from datetime import date
 
 # 1. Base Schema
 class ChartBase(BaseModel):
@@ -14,4 +15,22 @@ class ChartCreate(ChartBase):
 # 3. Respone(Read) Schema:
 class ChartResponse(ChartBase):
     id: int
+    model_config = ConfigDict(from_attributes=True)
+
+class SpotifyData(BaseModel):
+    id: int
+    spotify_id: str
+    name: str
+    artists: str
+    country: str
+    snapshot_date: date
+    daily_rank: int
+    daily_movement: int
+    duration_ms: int
+    explicit: bool
+    danceability: float
+    energy: float
+    valence: float
+    tempo: float
+    
     model_config = ConfigDict(from_attributes=True)

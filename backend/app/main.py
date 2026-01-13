@@ -4,6 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from . import models
 from .database import engine
 
+from .routers import data
+
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
@@ -17,6 +19,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"]
 )
+
+app.include_router(data.router, prefix="/api")
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
