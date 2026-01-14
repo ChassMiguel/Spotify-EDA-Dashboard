@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
-import axios from 'axios' //What is used to interact with the api from the backend
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import axios from 'axios'
 import './App.css'
+
+import LongevityBoxPlot from './components/LongevityBoxPlot';
+import MoodLineChart from './components/MoodLineChart';
+import MetricBarChart from './components/MetricBarChart';
+import ViralScatterPlot from './components/ViralScatterPlot';
+import AvgDurationCard from './components/AvgDurationCard';
 
 function App(){
 
   const [songs, setSongs] = useState([])
   const [loading, setLoading] = useState(true)
+  const [sortBy, setSortBy] = useState('original')
 
   useEffect(() =>{
     
@@ -25,77 +31,86 @@ function App(){
     fetchdata()
   }, [])
 
-  const explicitCount = songs.filter(song => song.explicit === true).length;
-  const cleanCount = songs.length - explicitCount;
+  const averageValence = songs.length 
+    ? (songs.reduce((acc, curr) => acc + (curr.valence || 0), 0) / songs.length).toFixed(3)
+    : 0;
 
-  const pieData = [
-    { name: 'Explicit', value: explicitCount },
-    { name: 'Clean', value: cleanCount }
-  ]
-  const COLORS = ['#FF8042', '#00C49F'];
+  if (loading) return <div style={{ color:'white', padding:'20px' }}>Loading Dashboard...</div>;
   
   return (
-    <div style={{ padding: "20px", maxWidth: "800px", margin: "0 auto" }}>
-      <h1>Music Dashboard</h1>
+    <div style={{ padding: "20px", maxWidth: "1400px", margin: "0 auto", color: "#fff", fontFamily: 'sans-serif' }}>
       
-      {loading ? (
-        <p>Connecting to backend...</p>
-      ) : (
-        <div>
-          <h3>Chart: Property Levels by Song</h3>
-          <div style={{ width: '100%', height: 400, marginBottom: '50px' }}>
-            <ResponsiveContainer>
-              <BarChart
-                data={songs}
-                margin={{ top: 20, right: 30, left: 20, bottom: 10 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis 
-                dataKey="name" 
-                interval={0}
-                angle={-45}
-                textAnchor="end"
-                height={100}
-                />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="energy" fill="#8884d8" name="Energy Level"/>
-                <Bar dataKey="danceability" fill="#d88e84" name="Danceability Level"/>
-                <Bar dataKey="valence" fill="#87d884" name="Valence Level"/>
-              </BarChart>
-            </ResponsiveContainer>
+      <h1 style={{ marginBottom: "30px" }}>Music Trends Dashboard</h1>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '3fr 1fr', gap: '20px', height: '300px' }}>
+          
+          <div style={cardStyle}>
+            <h3 style={titleStyle}>Daily Mood Trend (Valence)</h3>
+            <div style={{ flex: 1, minHeight: 0 }}>
+               <MoodLineChart data={songs} />
+            </div>
           </div>
-          <h3>Chart: Explicit vs. Clean Content</h3>
-          <div style={{ width: '100%', height: 400 }}>
-            <ResponsiveContainer>
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  cx="50%"
-                  cy="50%"
-                  label
-                  outerRadius={120}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
+
+          <div style={{...cardStyle, alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)'}}>
+            <h2 style={{ margin: 0, opacity: 0.9 }}>Overall Valence</h2>
+            <div style={{ fontSize: '4rem', fontWeight: 'bold' }}>{averageValence}</div>
           </div>
-          <p style={{marginTop: "50px", color: "#666"}}>
-            *Showing {songs.length} songs from the database.
-          </p>
         </div>
-      )}
+
+        <div style={{ display: 'grid', gridTemplateColumns: '3fr 1fr', gap: '20px', height: '350px' }}>
+          
+          <div style={cardStyle}>
+            <h3 style={titleStyle}>Energy vs. Danceability</h3>
+            <div style={{ flex: 1, minHeight: 0 }}>
+              <MetricBarChart data={songs} />
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div style={{ ...cardStyle, flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <h4 style={{ margin: 0, color: '#aaa' }}>Total Songs</h4>
+              <span style={{ fontSize: '2rem', fontWeight: 'bold', color: '#1db954' }}>{songs.length}</span>
+            </div>
+             <AvgDurationCard data={songs} />
+          </div>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', height: '400px' }}>
+          
+          <div style={cardStyle}>
+            <h3 style={titleStyle}>Viral Speed</h3>
+            <div style={{ flex: 1, minHeight: 0 }}>
+              <ViralScatterPlot data={songs} />
+            </div>
+          </div>
+
+          <div style={cardStyle}>
+            <h3 style={titleStyle}>Longevity (Clean vs. Explicit)</h3>
+            <div style={{ height: '300px', width: '100%' }}>
+               <LongevityBoxPlot data={songs} />
+            </div>
+          </div>
+
+        </div>
+
+      </div>
     </div>
-  )
+  );
 }
 
+
+const cardStyle = {
+  background: '#232323',
+  borderRadius: '15px',
+  padding: '20px',
+  boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
+  display: 'flex',
+  flexDirection: 'column',
+  overflow: 'hidden' 
+};
+
+const titleStyle = { margin: '0 0 15px 0', fontSize: '1.1rem', color: '#ddd' };
 
 export default App

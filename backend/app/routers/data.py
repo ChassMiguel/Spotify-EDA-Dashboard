@@ -8,4 +8,4 @@ from .. import models, schemas
 router = APIRouter()
 @router.get("/spotify-data", response_model=List[schemas.SpotifyData])
 def get_spotify_data(db: Session = Depends(get_db)):
-    return db.query(models.SpotifyData).limit(100).all()
+    return db.query(models.SpotifyData).all()

@@ -27,7 +27,7 @@ class SpotifyData(BaseModel):
     daily_rank: int
     daily_movement: int
     duration_ms: int
-    explicit: bool
+    is_explicit: bool
     danceability: float
     energy: float
     valence: float

@@ -19,7 +19,7 @@ class SpotifyData(Base):
     daily_rank = Column(Integer, index=True)
     daily_movement = Column(Integer, index=True)
     duration_ms = Column(Integer)
-    explicit = Column(Boolean)
+    is_explicit = Column(Boolean)
     danceability = Column(Float, index=True)
     energy = Column(Float, index=True)
     valence = Column(Float, index=True)
