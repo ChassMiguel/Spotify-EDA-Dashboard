@@ -64,7 +64,7 @@ spotify-trends-analyzer/
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/spotify-trends-analyzer.git
+git clone https://github.com/ChassMiguel/spotify-trends-analyzer.git
 cd spotify-trends-analyzer
 ```
 
