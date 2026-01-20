@@ -34,13 +34,13 @@
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
 
 ```text
 spotify-trends-analyzer/
-├── 📂 backend/              # Python FastAPI Server
-│   ├── 📂 app/
-│   │   ├── 📂 routers/      # API Route Handlers
+├──  backend/              # Python FastAPI Server
+│   ├──  app/
+│   │   ├──  routers/      # API Route Handlers
 │   │   │   ├── data.py      # Data fetching endpoints
 │   │   │   └── __init__.py
 │   │   ├── database.py      # DB Connection Logic
@@ -49,7 +49,7 @@ spotify-trends-analyzer/
 │   │   └── schemas.py       # Data Validation Schemas
 │   ├── .env                 # Environment Variables
 │   └── requirements.txt     # Python Dependencies
-├── 📂 frontend/             # React Client
+├──  frontend/             # React Client
 │   ├── src/
 │   │   ├── components/      # Recharts Visualizations
 │   │   ├── App.jsx          # Main Dashboard Layout
@@ -60,7 +60,7 @@ spotify-trends-analyzer/
 
 ---
 
-## ⚡ Quick Start
+##  Quick Start
 
 ### 1. Clone the Repository
 ```bash
