@@ -12,7 +12,6 @@ function App(){
 
   const [songs, setSongs] = useState([])
   const [loading, setLoading] = useState(true)
-  const [sortBy, setSortBy] = useState('original')
 
   useEffect(() =>{
     
